@@ -9,6 +9,16 @@ class Oferta
     float pret; /// in lei
     int locuridisponibile; ///locuri disponibile, maximul pestru oferta respectiva
 public:
+    Oferta(){}; ///constructor de initializare
+    Oferta(char *destinatie_, float pret_, int locuridisponibile_) ///constructor de initializare
+    {
+        strcpy(destinatie, destinatie_);
+        pret=pret_;
+        locuridisponibile=locuridisponibile_;
+    }
+
+    virtual ~Oferta(){} ///destructor
+
     const char *getDestinatie() const
     {
         return destinatie;
@@ -59,8 +69,23 @@ public:
 
 class Agentie_de_turism
 {
-    Oferta b[1000];
+    char nume[25];
+    int nr_oferte=0;
+    Oferta o[1000];
 public:
+    Agentie_de_turism(char *nume_, int nr_oferte_) ///constructor de initializare
+    {
+        strcpy(nume, nume_);
+        nr_oferte=nr_oferte_;
+    }
+    Agentie_de_turism(const Agentie_de_turism &agentie) ///constructor de copiere
+    {
+        strcpy(nume, agentie.nume);
+        nr_oferte=agentie.nr_oferte;
+    };
+
+    Agentie_de_turism() {};
+
     int cauta_oferta(char destinatie[], int pret, Oferta a[], int n)
     {
         for(int i=0;i<n;i++)
@@ -69,14 +94,54 @@ public:
         return -1;
     }
 
-    void setOferte(Oferta a[],int n)
-    {
-        for(int i=0;i<n;i++)
-            b[i]=a[i];
+    const char *getNume() const {
+        return nume;
     }
 
+    int getNrOferte() const {
+        return nr_oferte;
+    }
 
+    void setNume(char nume_[25])
+    {
+        strcpy(nume, nume_);
+    }
+
+    void setNrOferte(int nrOferte) {
+        nr_oferte = nrOferte;
+    }
+
+    void afisare()
+    {
+        cout<<nume<<" "<<nr_oferte;
+    }
+    virtual ~Agentie_de_turism() {} ///destructor
+
+    friend ostream &operator<<(ostream &out, const Agentie_de_turism &agentie);
+
+    friend istream &operator>>(istream &in, Agentie_de_turism &agentie);
+
+    bool operator==(const Agentie_de_turism &comp) const{
+        return nume==comp.nume && nr_oferte==comp.nr_oferte;
+    }
+
+    void operator+=(Oferta oferta_)
+    {
+        nr_oferte++;
+        o[nr_oferte-1]=oferta_;
+    }
 };
+/*
+ostream &operator<<(ostream &out, const Agentie_de_turism &agentieDeTurism)
+{
+
+}
+
+istream &operator>>(istream &in, Agentie_de_turism &agentieDeTurism)
+{
+
+}
+*/
 int main()
 {
     Oferta x; ///constructor de initializare
@@ -125,9 +190,5 @@ int main()
     cout<<endl;
     cout<<"Pozitia unde a fost gasita este:"<<endl;
     cout<<cauta;
-
-    Oferta *c=agentie.getB();
     return 0;
 }
-
-
