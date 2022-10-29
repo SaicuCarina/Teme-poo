@@ -96,20 +96,6 @@ public:
         nr_oferte=nr_oferte_;
     }
 
-    void cauta_oferta(char destinatie[], Oferta a[], int n)
-    {
-        int ok=0;
-        for(int i=0;i<n;i++)
-            if(strcmp(destinatie, a[i].getDestinatie())==0)
-            {
-                ok++;
-                cout<<"Pretul pentru destinatia cautata este: "<<a[i].getPret()<<" euro "<<endl;
-                cout<<"Locurile disponibile pentru locatia cautata sunt:"<<a[i].getLocuriDisponibile()<<endl<<endl;
-            }
-        if(ok==0)
-            cout<<"Nu exista oferte pentru destinatia cautata!";
-    }
-
     const char *getNume() const {
         return nume;
     }
@@ -138,9 +124,9 @@ public:
 
     ~Agentie_de_turism() {} ///destructor
 
-//    friend ostream &operator<<(ostream &out, const Agentie_de_turism &agentie);
+    friend ostream &operator<<(ostream &out, const Agentie_de_turism &agentie);
 
-//    friend istream &operator>>(istream &in, Agentie_de_turism &agentie);
+    friend istream &operator>>(istream &in, Agentie_de_turism &agentie);
 
     void operator+=(Oferta oferta_)
     {
@@ -149,108 +135,196 @@ public:
     }
 
     friend class Oferta;
+
+    void citest_agentie()
+    {
+        char n[25];
+        int nr_of;
+        Oferta off[100];
+        cin>>n>>nr_of;
+        strcpy(nume, n);
+        nr_oferte=nr_of;
+
+        ///for(int i=0;i<nr_of;i++)
+            ///off[i].citeste_oferta();
+    }
+    void cauta_oferta(char destinatie[], Oferta a[], int n)
+    {
+        int ok=0;
+        for(int i=0;i<n;i++)
+            if(strcmp(destinatie, a[i].getDestinatie())==0)
+            {
+                ok++;
+                cout<<"Pretul pentru destinatia cautata este: "<<a[i].getPret()<<" euro "<<endl;
+                cout<<"Locurile disponibile pentru locatia cautata sunt:"<<a[i].getLocuriDisponibile()<<endl<<endl;
+            }
+        if(ok==0)
+            cout<<"Nu exista oferte pentru destinatia cautata!";
+    }
+
+
+    void sterge_oferta(char destinatie[], float pret, Oferta a[], int &n)
+    {
+        int ok=0;
+        for(int i=0;i<n;i++)
+            if(strcmp(destinatie, a[i].getDestinatie())==0 && pret==a[i].getPret())
+            {
+                ok++;
+                for(int j=i+1;j<n;j++)
+                    a[j-1]=a[j];
+                n=n-1;
+            }
+        if(ok==0)
+            cout<<"Nu exista oferte pentru destinatia si pretul cautata, deci nu a fost nimic sters!";
+        else
+            cout<<"Ofertele cu destinatia si pretul cerut au fost sterse!";
+
+    }
 };
 
 ostream &operator<<(ostream &out, const Agentie_de_turism &agentie)
 {
-    out<<"Numele agentiei este: "<<agentie.getNume()<<endl;
-    out<<"Numarul ofertelor este: "<<agentie.getNrOferte()<<endl;
-    for(int i=0;i<agentie.getNrOferte();i++)
+    if(!agentie.nume)
     {
-        cout<<"Destinatia: "<<agentie.getOferta()[i].getDestinatie()<<endl;
-        cout<<"Pretul: "<<agentie.getOferta()[i].getPret()<<endl;
-        cout<<"Locuri disponibile: "<<agentie.getOferta()[i].getLocuriDisponibile()<<endl;
+        out<<"Nu a fost initializata!"<<endl;
+        return out;
     }
+    out<<"Numele agentiei este: "<<agentie.nume<<", iar numarul de oferte din aceasta agentie este: "<<agentie.nr_oferte<<endl;
+
     return out;
+//    out<<"Numele agentiei este: "<<agentie.getNume()<<endl;
+//    out<<"Numarul ofertelor este: "<<agentie.getNrOferte()<<endl;
+//    for(int i=0;i<agentie.getNrOferte();i++)
+//    {
+//        cout<<"Destinatia: "<<agentie.getOferta()[i].getDestinatie()<<endl;
+//        cout<<"Pretul: "<<agentie.getOferta()[i].getPret()<<endl;
+//        cout<<"Locuri disponibile: "<<agentie.getOferta()[i].getLocuriDisponibile()<<endl;
+//    }
 }
 
+istream &operator>>(istream &in, Agentie_de_turism &agentie)
+{
+    char buf[100];
+    in>>buf;
+    agentie.setNume(buf);
 
+    in>>agentie.nr_oferte;
+
+    return in;
+
+//    cout<<endl<<"Numele Agentiei este: ";
+//    in>>agentie.getNume();
+//    cout<<endl;
+//    cout<<"Numarul de oferte din agentie: ";
+//    in>>agentie.getNrOferte();
+    return in;
+}
 int main()
 {
     Oferta of1; ///constructor de initializare
     Oferta of[100];
 
+
+
     int n;
 
     Agentie_de_turism agentii;
 
-
-    int roll;
-    cout<<"Introduce un numar de la 1 la 6:";
-    cin >> roll;
-    switch(roll)
+    bool quit=false;
+    do
     {
+        cout<<endl;
+        cout<<"0.Exit"<<endl;
+        cout<<"1.Afisare constructorul de initializare!"<<endl;
+        cout<<"2.Afiseaza contructorul de copiere!"<<endl;
+        cout<<"3.Citeste si afiseaza n obiecte!"<<endl;
+        cout<<"4.Cauta o oferta dupa o anumita destinatie!"<<endl;
+        cout<<"5.Adaugarea mai multor oferte cu operatorul +=!"<<endl;
+        cout<<"6.Stergerea unei oferte dupa destinatie si pret!"<<endl;
+        cout<<"7.Supraincarcarea operatorilor >> si <<!"<<endl;
+        cout<<endl<<endl;
 
-        case 1:
+        int roll;
+        cout<<"Introduce un numar de la 1 la 7:";
+        cin>>roll;
+        switch(roll)
         {
-            cout<<"Afiseava contructorul de initializare!"<<endl;
-
-            of1.setDestinatie("Malta");
-            of1.setPret(400);
-            of1.setLocuridisponibile(3);
-
-            of1.afisare_oferta();
-            cout<<endl;
-
-            break;
-        }
-        case 2:
-        {
-            cout<<"Afiseaza contructorul de copiere!"<<endl;
-
-            Oferta x(of1); ///constructor de copiere
-            cout<<"Constructorul de copiere are vlaorile:"<<endl;
-
-            x.afisare_oferta();
-            cout<<endl;
-
-            break;
-        }
-        case 3:
-        {
-            cout<<"Citeste si afiseaza n obiecte"<<endl;
-
-            cout<<"Introduceti un numar de oferte:";
-            cin>>n;
-
-            Agentie_de_turism ag1("Veltravel", n);
-            ag1.afisare_agentie();
-            cout<<endl<<endl;
-
-            cout<<"Cele "<<ag1.getNrOferte()<<" oferte din agentia "<<ag1.getNume()<<" sunt: "<<endl;
-            for(int i=0;i<ag1.getNrOferte();i++)
+            case 0:
+                quit=true;
+            case 1:
             {
-                cout<<i+1<<": ";
-                of[i].citire_oferta();
+                of1.setDestinatie("Malta");
+                of1.setPret(400);
+                of1.setLocuridisponibile(3);
+
+                of1.afisare_oferta();
+                cout<<endl;
+
+                break;
             }
-            for(int i=0;i<ag1.getNrOferte();i++)
+            case 2:
             {
-                cout<<"Oferta cu numarul "<<i+1<<" este: "<<endl;
-                of[i].afisare_oferta();
+                Oferta of2(of1); ///constructor de copiere
+                cout<<"Constructorul de copiere are vlaorile:"<<endl;
+
+                of2.afisare_oferta();
+                cout<<endl;
+
+                break;
             }
-            break;
-        }
-        case 4:
-        {
-            cout<<"Cauta o oferta dupa o anumita destinatie!"<<endl;
+            case 3:
+            {
+                cout<<"Introduceti un numar de oferte:";
+                cin>>n;
+                
+                ///Agentie_de_turism ag1("Veltravel", n);
+                Agentie_de_turism ag1;
+                ag1.citest_agentie();
+                ag1.afisare_agentie();
+                cout<<endl<<endl;
 
-            agentii.cauta_oferta("Malta", of, n);
-            break;
-        }
-        case 5:
-        {
-            cout<<"Adaugarea mai multor oferte cu operatorul +=!";
-            agentii+=Oferta("Argentina", 400, 1);
-            agentii+=Oferta("Malta", 400, 3);
-            cout<<endl;
-            cout<<agentii;
-            break;
-        }
-        case 6:
-            break;
+                cout<<"Cele "<<ag1.getNrOferte()<<" oferte din agentia "<<ag1.getNume()<<" sunt: "<<endl;
+                for(int i=0;i<ag1.getNrOferte();i++)
+                {
+                    cout<<i+1<<": ";
+                    of[i].citire_oferta();
+                }
+                for(int i=0;i<ag1.getNrOferte();i++)
+                {
+                    cout<<"Oferta cu numarul "<<i+1<<" este: "<<endl;
+                    of[i].afisare_oferta();
+                }
+                break;
+            }
+            case 4:
+            {
+                agentii.cauta_oferta("Malta", of, n);
+                break;
+            }
+            case 5:
+            {
+                agentii+=Oferta("Argentina", 400, 1);
+                agentii+=Oferta("Malta", 400, 3);
+                cout<<endl;
+                cout<<agentii;
+                break;
+            }
+            case 6:
+            {
+                Oferta of6[100];
 
-        default:
-            cout<<"Nu ai introdus un numar intre 1 si 6!";
-    }
+                agentii.sterge_oferta("Malta", 400, of6, n);
+                break;
+            }
+            case 7:
+                break;
+            default:
+            {
+                cout<<"Nu ai introdus un numar intre 1 si 7!";
+                break;
+            }
+        }
+    }while(!quit);
+
     return 0;
 }
