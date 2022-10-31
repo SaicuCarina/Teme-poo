@@ -235,17 +235,18 @@ int main()
         cout<<"0.Exit"<<endl;
         cout<<"1.Afisarea constructorul de initializare!"<<endl;
         cout<<"2.Afisarea contructorul de copiere!"<<endl;
-        cout<<"3.Citirea si afisarea n obiecte!"<<endl;
-        cout<<"4.Cautarea ofertelor cu o anumita destinatie, din cele n oferte citite la punctul 3!"<<endl;
-        cout<<"5.Adaugarea mai multor oferte cu operatorul +=!"<<endl;
-        cout<<"6.Stergerea ofertelor cu destinatia Malta si pretul de 400 euro!"<<endl;
-        cout<<"7.Supraincarcarea operatorilor >> si <<!"<<endl;
-        cout<<"8.Adaugarea unei oferte in vectorul de oferte deja existente"<<endl;
+        cout<<"3.Afisarea operatorului de atribuire!"<<endl;
+        cout<<"4.Citirea si afisarea n obiecte!"<<endl;
+        cout<<"5.Cautarea ofertelor cu o anumita destinatie, din cele n oferte citite la punctul 3!"<<endl;
+        cout<<"6.Adaugarea mai multor oferte cu operatorul +=!"<<endl;
+        cout<<"7.Stergerea ofertelor cu destinatia Malta si pretul de 400 euro!"<<endl;
+        cout<<"8.Supraincarcarea operatorilor >> si <<!"<<endl;
+        cout<<"9.Adaugarea unei oferte in vectorul de oferte deja existente"<<endl;
 
         cout<<endl<<endl;
 
         int roll;
-        cout<<"Introduce un numar de la 1 la 8:";
+        cout<<"Introduce un numar de la 1 la 9:";
         cout<<endl;
         cin>>roll;
         switch(roll)
@@ -277,6 +278,17 @@ int main()
             }
             case 3:
             {
+                Oferta of3;
+                cout<<"Operatorul de atribuire '=' atribuie valorile: "<<endl;
+
+                of3 = of1; /// operator de atribuire =
+                of3.afisare_oferta();
+                cout<<endl;
+
+                break;
+            }
+            case 4:
+            {
                 cout<<"Introduceti o agentie noua(numele+nr de oferte din acea agentie): ";
                 ///Agentie_de_turism ag1("Veltravel", n);
                 ag.citest_agentie();
@@ -298,7 +310,7 @@ int main()
 
                 break;
             }
-            case 4:
+            case 5:
             {
                 char destinatie_cautata[100];
                 cout<<"Introduceti ce destinatie cautati: ";
@@ -308,7 +320,7 @@ int main()
                 ag.cauta_oferta(destinatie_cautata, of, ag.getNrOferte());
                 break;
             }
-            case 5:
+            case 6:
             {
                 Agentie_de_turism agentii;
                 agentii.setNume("TTravel");
@@ -318,7 +330,7 @@ int main()
                 cout<<agentii;
                 break;
             }
-            case 6:
+            case 7:
             {
                 int m=ag.getNrOferte();
 
@@ -331,7 +343,7 @@ int main()
                 }
                 break;
             }
-            case 7: ///????????
+            case 8:
             {
                 Agentie_de_turism ag1;
                 cout<<"Introduceti un nume de agentie: "<<endl;
@@ -344,7 +356,7 @@ int main()
                 cout<<ag1;
                 break;
             }
-            case 8:
+            case 9:
             {
                 ///adaugarea unei oferte in vectorul de oferte deja existente
                 Oferta oferta_de_adaugat;
